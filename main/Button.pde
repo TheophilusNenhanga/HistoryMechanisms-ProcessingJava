@@ -1,11 +1,11 @@
-public class Rectangle{
+public class Button{
   String action;
   int width; 
   int height;
   int x;
   int y;
   
-  public Rectangle(String action, int x, int y){
+  public Button(String action, int x, int y){
     this.action = action;
     this.width = 140;
     this.height = 30;
