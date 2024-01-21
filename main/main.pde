@@ -1,4 +1,7 @@
 Model model = new Model();
+Button fileButton = model.getFileButton();
+
+boolean childrenShown = false;
 
 void setup(){
   size(800, 800);
@@ -8,6 +11,21 @@ void setup(){
 }
 
 void draw(){  
-  ArrayList<Button> buttons = model.getButtons();
-  buttons.forEach((button) -> button.draw());
+  // ArrayList<Button> buttons = model.getButtons();
+  background(51); // color the background grey each draw loop
+  fileButton.setVisible(true);
+ 
+  fileButton.draw();
 }
+
+void mouseClicked(){
+   if (fileButton.contains(mouseX, mouseY)){
+    if (childrenShown == false){
+      fileButton.showChildren();
+     childrenShown = true;
+    }else{
+      fileButton.hideChildren();
+     childrenShown = false;
+    }
+   }
+} 
