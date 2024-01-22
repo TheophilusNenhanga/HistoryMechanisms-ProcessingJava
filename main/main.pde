@@ -11,21 +11,35 @@ void setup(){
 }
 
 void draw(){  
-  // ArrayList<Button> buttons = model.getButtons();
   background(51); // color the background grey each draw loop
   fileButton.setVisible(true);
- 
   fileButton.draw();
 }
 
 void mouseClicked(){
-   if (fileButton.contains(mouseX, mouseY)){
-    if (childrenShown == false){
-      fileButton.showChildren();
-     childrenShown = true;
-    }else{
-      fileButton.hideChildren();
-     childrenShown = false;
-    }
-   }
+   model.getButtons().forEach((button) -> {
+     if (button.contains(mouseX, mouseY)){
+       button.onClickEnter();
+     }else{
+       button.onClickExit();
+     }
+   });
 } 
+
+void mousePressed(){
+    model.getButtons().forEach((button) -> {
+    if (button.contains(mouseX, mouseY)){
+    button.onPressEnter();
+    }
+  });
+}
+
+void mouseMoved(){
+  model.getButtons().forEach((button) -> {
+    if (button.contains(mouseX, mouseY)){
+    button.onHoverEnter();
+  }else{
+    button.onHoverExit();
+  }
+  });
+}
