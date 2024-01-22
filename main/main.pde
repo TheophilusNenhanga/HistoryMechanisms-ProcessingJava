@@ -18,6 +18,7 @@ void draw(){
 
 void mouseClicked(){
    model.getButtons().forEach((button) -> {
+     button.onPressExit();
      if (button.contains(mouseX, mouseY)){
        button.onClickEnter();
      }else{

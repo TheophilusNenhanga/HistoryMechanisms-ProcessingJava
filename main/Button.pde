@@ -1,14 +1,14 @@
 public class Button{
-  String action;
-  int width; 
-  int height;
-  int x;
-  int y;
-  ArrayList<Button> children;
-  boolean visible;
-  boolean pressed;
-  int[] fill;
-  boolean childrenVisible;
+  private String action;
+  private int width; 
+  private int height;
+  private int x;
+  private int y;
+  private ArrayList<Button> children;
+  private boolean visible;
+  private boolean pressed;
+  private int[] fill;
+  private boolean childrenVisible;
   
   public Button(String action, int x, int y){
     this.action = action;
