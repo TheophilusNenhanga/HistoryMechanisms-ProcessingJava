@@ -1,5 +1,7 @@
 Model model = new Model();
 Button fileButton = model.getFileButton();
+enum Mode {RECENCY_HOTLIST, RECENCY_HIGHLIGHTING, FREQUENCY_HIGHLIGHTING, FREQUENCY_RESIZING, NO_MODE};
+Mode mode = Mode.NO_MODE;
 
 boolean childrenShown = false;
 
@@ -13,6 +15,29 @@ void setup(){
 void draw(){  
   background(51); // color the background grey each draw loop
   fileButton.setVisible(true);
+  // do something different for each mode
+  switch (mode){
+    case RECENCY_HOTLIST:{
+    break;
+    }
+    
+    case  RECENCY_HIGHLIGHTING: {
+    break;
+    }
+    
+    case FREQUENCY_HIGHLIGHTING: {
+      break;
+    }
+    
+    case FREQUENCY_RESIZING:{
+    break;
+    }
+    
+    case NO_MODE:{
+      break;
+    }
+    
+  }
   fileButton.draw();
 }
 
@@ -43,4 +68,34 @@ void mouseMoved(){
     button.onHoverExit();
   }
   });
+}
+
+void keyTyped(){
+  switch (key){
+    case 'q':{
+      model.getButtons().forEach((button) -> {
+        println(button.getAction() + " clicked: " + button.getClickCount());
+      });
+    }
+    
+    case '1':{
+    mode = Mode.RECENCY_HOTLIST;
+    break;
+    }
+    
+    case '2':{
+    mode = Mode.RECENCY_HIGHLIGHTING;
+    break;
+    }
+    
+    case '3':{
+    mode = Mode.FREQUENCY_HIGHLIGHTING;
+    break;
+    }
+    
+    case '4':{
+    mode = Mode.FREQUENCY_RESIZING;
+    break;
+    }
+  }
 }

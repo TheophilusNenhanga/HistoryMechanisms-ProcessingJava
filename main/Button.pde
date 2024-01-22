@@ -9,6 +9,7 @@ public class Button{
   private boolean pressed;
   private int[] fill;
   private boolean childrenVisible;
+  private int clickCount;
   
   public Button(String action, int x, int y){
     this.action = action;
@@ -21,6 +22,7 @@ public class Button{
     this.childrenVisible = false;
     this.fill = new int[]{200, 200, 200};
     this.pressed = false;
+    this.clickCount = 0;
   }
   
   public void draw(){
@@ -78,6 +80,7 @@ public class Button{
       hideChildren();
       childrenVisible = false;
     }
+    this.clickCount += 1;
   }
   
   public void onPressEnter(){
@@ -114,5 +117,13 @@ public class Button{
       this.fill[1] = 200;
       this.fill[2] = 200;
     }
+  }
+  
+  public int getClickCount(){
+    return this.clickCount;
+  }
+  
+  public String getAction(){
+    return this.action;
   }
 }
