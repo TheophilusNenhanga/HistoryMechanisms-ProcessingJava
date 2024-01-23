@@ -46,6 +46,7 @@ void mouseClicked(){
      button.onPressExit();
      if (button.contains(mouseX, mouseY)){
        button.onClickEnter();
+       model.addRecentButton(button);
      }else{
        button.onClickExit();
      }
@@ -73,13 +74,19 @@ void mouseMoved(){
 void keyTyped(){
   switch (key){
     case 'q':{
-      model.getButtons().forEach((button) -> {
-        println(button.getAction() + " clicked: " + button.getClickCount());
-      });
+      println(model.getFrequentButtons());
+      println(model.getRecentButtons());
     }
     
     case '1':{
     mode = Mode.RECENCY_HOTLIST;
+    model.getButtons().forEach(button -> {
+      if (button != fileButton){
+        button.setY(button.getY() + 100);
+      }
+    });
+    // Create recency List
+    // TODO: Add proxy buttons. When they are clicked they update the button that they stand for.
     break;
     }
     

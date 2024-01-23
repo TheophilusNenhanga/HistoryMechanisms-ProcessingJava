@@ -126,4 +126,23 @@ public class Button{
   public String getAction(){
     return this.action;
   }
+  
+  @Override
+  public String toString(){
+    return "\n" + this.action + " clicked: " + this.clickCount + " visible: " + this.visible;
+  }
+  
+  public void setX(int newX){
+    this.x = newX;
+  }
+  public int getX(){
+    return this.x;
+  }
+  
+    public void setY(int newY){
+    this.y = newY;
+  }
+  public int getY(){
+    return this.y;
+  }
 }
