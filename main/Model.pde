@@ -3,6 +3,7 @@ public class Model{
     private ArrayList<Button> buttons = new ArrayList<Button>();
     private ArrayList<Button> recents;
     private ArrayList<Button> frequents = new ArrayList<Button>();
+    private ArrayList<ProxyButton> proxies = new ArrayList<ProxyButton>();
     Button fileButton;
 
     public Model(){
@@ -42,6 +43,12 @@ public class Model{
       }
      
     }
+    
+    public void addProxy(ProxyButton proxy){
+      this.proxies.add(proxy);
+    }
+    
+    public ArrayList<ProxyButton> getProxies(){return this.proxies;}
     
     public ArrayList<Button> getFrequentButtons(){
       this.frequents.sort((o1, o2) -> ((Integer) o2.getClickCount()).compareTo((Integer) o1.getClickCount()));

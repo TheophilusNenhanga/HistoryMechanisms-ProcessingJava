@@ -135,14 +135,10 @@ public class Button{
   public void setX(int newX){
     this.x = newX;
   }
-  public int getX(){
-    return this.x;
-  }
-  
-    public void setY(int newY){
-    this.y = newY;
-  }
-  public int getY(){
-    return this.y;
-  }
+  public int getX(){return this.x;}
+  public void setY(int newY){this.y = newY;}
+  public int getY(){return this.y;}
+  public int getWidth(){return this.width;}
+  public int getHeight(){return this.height;}
+  public boolean getVisible(){return this.visible;}
 }

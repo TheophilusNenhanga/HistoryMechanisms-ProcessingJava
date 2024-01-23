@@ -18,6 +18,10 @@ void draw(){
   // do something different for each mode
   switch (mode){
     case RECENCY_HOTLIST:{
+      model.getRecentButtons().forEach((button) -> {
+      ProxyButton proxy = new ProxyButton(button, fileButton.getX(), fileButton.getY()); // TODO check positions of buttons. Why are they not appearing?
+      model.addProxy(proxy);
+      });
     break;
     }
     
@@ -39,6 +43,7 @@ void draw(){
     
   }
   fileButton.draw();
+  model.getProxies().forEach(b -> b.draw());
 }
 
 void mouseClicked(){
@@ -79,29 +84,37 @@ void keyTyped(){
     }
     
     case '1':{
+      if (mode != Mode.RECENCY_HOTLIST){
     mode = Mode.RECENCY_HOTLIST;
     model.getButtons().forEach(button -> {
       if (button != fileButton){
         button.setY(button.getY() + 100);
       }
     });
+      }
     // Create recency List
     // TODO: Add proxy buttons. When they are clicked they update the button that they stand for.
     break;
     }
     
     case '2':{
+      if (mode != Mode.RECENCY_HIGHLIGHTING){
     mode = Mode.RECENCY_HIGHLIGHTING;
+      }
     break;
     }
     
     case '3':{
+      if (mode != Mode.FREQUENCY_HIGHLIGHTING){
     mode = Mode.FREQUENCY_HIGHLIGHTING;
+      }
     break;
     }
     
     case '4':{
+      if (mode != Mode.FREQUENCY_RESIZING){
     mode = Mode.FREQUENCY_RESIZING;
+      }
     break;
     }
   }
