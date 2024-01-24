@@ -10,6 +10,7 @@ public class Button{
   private int[] fill;
   private boolean childrenVisible;
   private int clickCount;
+  private boolean hovered;
   
   public Button(String action, int x, int y){
     this.action = action;
@@ -23,6 +24,7 @@ public class Button{
     this.fill = new int[]{200, 200, 200};
     this.pressed = false;
     this.clickCount = 0;
+    this.hovered = false;
   }
   
   public void draw(){
@@ -105,6 +107,7 @@ public class Button{
   
   public void onHoverEnter(){
     if (this.visible){
+      this.hovered = true;
     this.fill[0] = 255;
     this.fill[1] = 255;
     this.fill[2] = 255;
@@ -112,10 +115,11 @@ public class Button{
   }
   
   public void onHoverExit(){
-    if (this.visible){
+    if (this.visible && this.hovered){
       this.fill[0] = 200;
       this.fill[1] = 200;
       this.fill[2] = 200;
+      this.hovered = false;
     }
   }
   
@@ -140,5 +144,12 @@ public class Button{
   public int getY(){return this.y;}
   public int getWidth(){return this.width;}
   public int getHeight(){return this.height;}
-  public boolean getVisible(){return this.visible;}
+  
+  public void changeFill(int v1, int v2, int v3){
+    this.fill[0] = v1;
+    this.fill[1] = v2;
+    this.fill[2] = v3;
+  }
+  
+  public int[] getFill(){return this.fill;}
 }

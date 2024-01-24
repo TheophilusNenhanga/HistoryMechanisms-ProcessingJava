@@ -45,7 +45,14 @@ public class Model{
     }
     
     public void addProxy(ProxyButton proxy){
+      for (ProxyButton prox: this.proxies){
+        if (proxy.getButton().getAction().equals(prox.getButton().getAction())) return;
+      }
       this.proxies.add(proxy);
+    }
+    
+    public void clearProxies(){
+      this.proxies.clear();
     }
     
     public ArrayList<ProxyButton> getProxies(){return this.proxies;}

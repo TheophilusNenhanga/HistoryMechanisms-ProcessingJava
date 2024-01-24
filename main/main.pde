@@ -18,18 +18,27 @@ void draw(){
   // do something different for each mode
   switch (mode){
     case RECENCY_HOTLIST:{
-      model.getRecentButtons().forEach((button) -> {
-      ProxyButton proxy = new ProxyButton(button, fileButton.getX(), fileButton.getY()); // TODO check positions of buttons. Why are they not appearing?
+      model.clearProxies();
+      for (int i = 0; i < model.getRecentButtons().size(); i++){
+      ProxyButton proxy = new ProxyButton(model.getRecentButtons().get(i), fileButton.getX(), fileButton.getY() + (i+1) * fileButton.getHeight() ); // TODO check positions of buttons. Why are they not appearing?
       model.addProxy(proxy);
-      });
+      }
     break;
     }
     
     case  RECENCY_HIGHLIGHTING: {
+      for (int i = 0; i < model.getRecentButtons().size(); i++){
+          int[] currentFill = model.getRecentButtons().get(i).getFill();
+          model.getRecentButtons().get(i).changeFill(currentFill[0] - (i + 1) * 25, currentFill[1] + (i + 1) * 10, currentFill[2] - (i + 1) * 15);
+        }
     break;
     }
     
     case FREQUENCY_HIGHLIGHTING: {
+            for (int i = 0; i < 3; i++){
+          int[] currentFill = model.getFrequentButtons().get(i).getFill();
+          model.getFrequentButtons().get(i).changeFill(currentFill[0] - (i + 1) * 10, currentFill[1] - (i + 1) * 15, currentFill[2] + (i + 1) * 15);
+        }
       break;
     }
     
@@ -42,11 +51,22 @@ void draw(){
     }
     
   }
+      
   fileButton.draw();
   model.getProxies().forEach(b -> b.draw());
 }
 
 void mouseClicked(){
+  model.getProxies().forEach((button) -> {
+     button.onPressExit();
+     if (button.contains(mouseX, mouseY)){
+       button.onClickEnter();
+       model.addRecentButton(button.getButton());
+     }else{
+       button.onClickExit();
+     }
+   });
+  
    model.getButtons().forEach((button) -> {
      button.onPressExit();
      if (button.contains(mouseX, mouseY)){
@@ -59,6 +79,12 @@ void mouseClicked(){
 } 
 
 void mousePressed(){
+    model.getProxies().forEach((button) -> {
+    if (button.contains(mouseX, mouseY)){
+    button.onPressEnter();
+    }
+  });
+  
     model.getButtons().forEach((button) -> {
     if (button.contains(mouseX, mouseY)){
     button.onPressEnter();
@@ -67,6 +93,14 @@ void mousePressed(){
 }
 
 void mouseMoved(){
+  model.getProxies().forEach((b) -> {
+  if (b.contains(mouseX, mouseY)){ //<>//
+    b.onHoverEnter();
+  }else{
+    b.onHoverExit();
+  }
+  });
+  
   model.getButtons().forEach((button) -> {
     if (button.contains(mouseX, mouseY)){
     button.onHoverEnter();
@@ -81,30 +115,63 @@ void keyTyped(){
     case 'q':{
       println(model.getFrequentButtons());
       println(model.getRecentButtons());
+      println(model.getProxies());
+      break;
     }
     
     case '1':{
+      if (mode == Mode.RECENCY_HIGHLIGHTING || mode == Mode.FREQUENCY_HIGHLIGHTING){
+        model.getButtons().forEach(button -> {
+          button.changeFill(200, 200, 200);
+      });
+      }
       if (mode != Mode.RECENCY_HOTLIST){
-    mode = Mode.RECENCY_HOTLIST;
-    model.getButtons().forEach(button -> {
-      if (button != fileButton){
-        button.setY(button.getY() + 100);
+        mode = Mode.RECENCY_HOTLIST;
+        model.getButtons().forEach(button -> {
+          if (button != fileButton){
+          button.setY(button.getY() + 100);
+        }
+      });
       }
-    });
-      }
-    // Create recency List
-    // TODO: Add proxy buttons. When they are clicked they update the button that they stand for.
     break;
     }
     
     case '2':{
+            if (mode == Mode.RECENCY_HIGHLIGHTING){
+        model.getButtons().forEach(button -> {
+          button.changeFill(200, 200, 200);
+      });
+            }
+      if (mode == Mode.RECENCY_HOTLIST){
+        model.clearProxies();
+      // if we are coming from mode 1
+      model.getButtons().forEach(button -> {
+          if (button != fileButton){
+          button.setY(button.getY() - 100);
+        }
+      });
+      }
       if (mode != Mode.RECENCY_HIGHLIGHTING){
-    mode = Mode.RECENCY_HIGHLIGHTING;
+        mode = Mode.RECENCY_HIGHLIGHTING;
       }
     break;
     }
     
     case '3':{
+            if (mode == Mode.RECENCY_HIGHLIGHTING){
+        model.getButtons().forEach(button -> {
+          button.changeFill(200, 200, 200);
+      });
+            }
+            if (mode == Mode.RECENCY_HOTLIST){
+              model.clearProxies();
+      // if we are coming from mode 1
+      model.getButtons().forEach(button -> {
+          if (button != fileButton){
+          button.setY(button.getY() - 100);
+        }
+      });
+      }
       if (mode != Mode.FREQUENCY_HIGHLIGHTING){
     mode = Mode.FREQUENCY_HIGHLIGHTING;
       }
@@ -112,6 +179,20 @@ void keyTyped(){
     }
     
     case '4':{
+            if (mode == Mode.RECENCY_HIGHLIGHTING || mode == Mode.FREQUENCY_HIGHLIGHTING){
+        model.getButtons().forEach(button -> {
+          button.changeFill(200, 200, 200);
+      });
+            }
+            if (mode == Mode.RECENCY_HOTLIST){
+              model.clearProxies();
+      // if we are coming from mode 1
+      model.getButtons().forEach(button -> {
+          if (button != fileButton){
+          button.setY(button.getY() - 100);
+        }
+      });
+      }
       if (mode != Mode.FREQUENCY_RESIZING){
     mode = Mode.FREQUENCY_RESIZING;
       }
