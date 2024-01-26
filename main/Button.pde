@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Button {
 	private String action;
 	private int width;
@@ -27,8 +29,8 @@ public class Button {
 		this.pressed = false;
 		this.clickCount = 0;
 		this.hovered = false;
-		this.minimumHeight = 20;
-		this.maximumHeight = 160;
+		this.minimumHeight = 10;
+		this.maximumHeight = 200;
 	}
 
 	public void draw() {
@@ -37,7 +39,7 @@ public class Button {
 			rect(this.x, this.y, this.width, this.height);
 			textSize(18);
 			fill(0, 0, 0);
-			text(this.action, this.x, this.y + 5, this.width, 20);
+			text(this.action, this.x, this.y, this.width, this.height);
 
 			this.children.forEach(child -> child.draw());
 		}
@@ -137,7 +139,7 @@ public class Button {
 
 	@Override
 	public String toString() {
-		return "\n" + this.action + " clicked: " + this.clickCount + " visible: " + this.visible;
+		return "\n" + this.action + " clicked: " + this.clickCount + " visible: " + this.visible + " fill: " + Arrays.toString(this.fill);
 	}
 
 	public void setX(int newX) {
@@ -170,16 +172,30 @@ public class Button {
 		this.fill[2] = v3;
 	}
 
+	public void changeFill(int[] fill) {
+		this.fill[0] = fill[0];
+		this.fill[1] = fill[1];
+		this.fill[2] = fill[2];
+	}
+
 	public int[] getFill() {
 		return this.fill;
 	}
 
 	public void grow() {
-		this.height = Math.min(this.maximumHeight, this.height + 5);
+		this.height = Math.min(this.maximumHeight, this.height + 2);
 	}
 
 	public void shrink() {
-		this.height = Math.max(this.minimumHeight, this.height - 5);
+		this.height = Math.max(this.minimumHeight, this.height - 3);
+	}
+
+	public void grow(int factor) {
+		this.height = Math.min(this.maximumHeight, this.height + 3 * factor);
+	}
+
+	public void shrink(int factor) {
+		this.height = Math.max(this.minimumHeight, this.height - 3 * factor);
 	}
 
 	public void resetSize() {

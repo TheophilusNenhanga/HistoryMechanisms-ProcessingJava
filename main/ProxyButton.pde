@@ -38,7 +38,7 @@ class ProxyButton {
 
 	public boolean contains(int x, int y) {
 		if (x >= this.x && y >= this.y && x <= this.x + this.width && y <= this.y + this.height) {
-			println("Proxy button for: " + this.buttom.getAction());
+			println("Proxy button for: " + this.button.getAction());
 			return true;
 		}
 		return false;

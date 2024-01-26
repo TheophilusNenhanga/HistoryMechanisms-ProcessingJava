@@ -63,4 +63,10 @@ public class Model {
 		this.frequents.sort((o1, o2) -> ((Integer) o2.getClickCount()).compareTo((Integer) o1.getClickCount()));
 		return this.frequents;
 	}
+
+	public void resetSizes() {
+		this.buttons.forEach((button) -> {
+			button.resetSize();
+		});
+	}
 }

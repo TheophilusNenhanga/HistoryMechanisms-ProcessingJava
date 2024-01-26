@@ -1,6 +1,8 @@
 Model model = new Model();
 Button fileButton = model.getFileButton();
-int[][] fillColors = new int[][]{[], [], [], [], []}; // TODO: manually code in 5 colors
+int[][] fillColorsRecency = new int[][]{{60, 60, 255}, {110, 110, 220}, {120, 120, 190}, {130, 130, 170}, {140, 140, 140}};  // Colors that will be used for the different modes
+int[][] fillColorsFrequency = new int[][]{{60, 260, 60}, {100, 230, 100}, {120, 200, 120}, {130, 170, 130}, {140, 140, 140}};
+boolean anyClicked = false;
 
 enum Mode {RECENCY_HOTLIST, RECENCY_HIGHLIGHTING, FREQUENCY_HIGHLIGHTING, FREQUENCY_RESIZING, NO_MODE}
 
@@ -9,7 +11,7 @@ Mode mode = Mode.NO_MODE;
 boolean childrenShown = false;
 
 void setup() {
-	size(800, 800);
+	size(1000, 1000);
 	frameRate(30);
 	windowTitle("Theophilus Nenhanga - CMPT 481 - Assignment 2");
 	textAlign(CENTER, CENTER);
@@ -18,6 +20,7 @@ void setup() {
 void draw() {
 	background(51); // color the background grey each draw loop
 	fileButton.setVisible(true);
+
 	// do something different for each mode
 	switch (mode) {
 		case RECENCY_HOTLIST: {
@@ -30,22 +33,64 @@ void draw() {
 		}
 
 		case RECENCY_HIGHLIGHTING: {
-			for (int i = 0; i < model.getRecentButtons().size(); i++) {
-				int[] currentFill = model.getRecentButtons().get(i).getFill();
-				model.getRecentButtons().get(i).changeFill(currentFill[0] - (i + 1) * 25, currentFill[1] + (i + 1) * 10, currentFill[2] - (i + 1) * 15);
+			for (int i = 0; i < 3; i++) {
+				model.getRecentButtons().get(i).changeFill(fillColorsRecency[i]);
 			}
 			break;
 		}
 
 		case FREQUENCY_HIGHLIGHTING: {
 			for (int i = 0; i < 3; i++) {
-				int[] currentFill = model.getFrequentButtons().get(i).getFill();
-				model.getFrequentButtons().get(i).changeFill(currentFill[0] - (i + 1) * 10, currentFill[1] - (i + 1) * 15, currentFill[2] + (i + 1) * 15);
+				model.getFrequentButtons().get(i).changeFill(fillColorsFrequency[i]);
 			}
 			break;
 		}
 
 		case FREQUENCY_RESIZING: {
+
+			Button first = model.getFrequentButtons().get(0);
+			Button second = model.getFrequentButtons().get(1);
+			Button third = model.getFrequentButtons().get(2);
+
+			Button last = model.getFrequentButtons().get(model.getFrequentButtons().size() - 1);
+			Button last1 = model.getFrequentButtons().get(model.getFrequentButtons().size() - 2);
+			Button last2 = model.getFrequentButtons().get(model.getFrequentButtons().size() - 3);
+
+			if (first.getClickCount() != 0) {
+				first.grow(3);
+			}
+
+			if (second.getClickCount() != 0) {
+				second.grow(2);
+			}
+
+			if (third.getClickCount() != 0) {
+				third.grow(1);
+			}
+
+			for (Button button : model.getButtons()) {
+				if (!(button == first || button == second || button == third || button == last || button == last1 || button == last2)) {
+					button.resetSize();
+				}
+			}
+
+			if (anyClicked) {
+				last.shrink(3);
+				last1.shrink(2);
+				last2.shrink(1);
+			}
+
+			for (int i = 0; i < model.getButtons().size(); i++) {
+				if (model.getButtons().get(i) == fileButton) {
+					continue;
+				}
+				if (i == 0) {
+					continue;
+				}
+				Button thisButton = model.getButtons().get(i);
+				Button prevButton = model.getButtons().get(i - 1);
+				thisButton.setY(prevButton.getY() + prevButton.getHeight());
+			}
 
 			break;
 		}
@@ -54,16 +99,17 @@ void draw() {
 			break;
 		}
 
-	}
+	} //<>//
 
 	fileButton.draw();
-	model.getProxies().forEach(b -> b.draw());
+	model.getProxies().forEach(b -> b.draw()); //<>//
 }
 
 void mouseClicked() {
 	model.getProxies().forEach((button) -> {
 		button.onPressExit();
 		if (button.contains(mouseX, mouseY)) {
+			anyClicked = true;
 			button.onClickEnter();
 			model.addRecentButton(button.getButton());
 		} else {
@@ -95,7 +141,8 @@ void mousePressed() {
 		}
 	});
 }
- //<>//
+
+//<>//
 void mouseMoved() {
 	model.getProxies().forEach((b) -> {
 		if (b.contains(mouseX, mouseY)) { //<>//
@@ -129,7 +176,7 @@ void keyTyped() {
 					button.changeFill(200, 200, 200);
 				});
 			}
-			if (mode == Mode.FREQUENCY_RESIZING){
+			if (mode == Mode.FREQUENCY_RESIZING) {
 				model.getButtons().forEach(button -> button.resetSize());
 			}
 
@@ -160,7 +207,7 @@ void keyTyped() {
 				});
 			}
 
-			if (mode == Mode.FREQUENCY_RESIZING){
+			if (mode == Mode.FREQUENCY_RESIZING) {
 				model.getButtons().forEach(button -> button.resetSize());
 			}
 
@@ -186,7 +233,7 @@ void keyTyped() {
 				});
 			}
 
-			if (mode == Mode.FREQUENCY_RESIZING){
+			if (mode == Mode.FREQUENCY_RESIZING) {
 				model.getButtons().forEach(button -> button.resetSize());
 			}
 
@@ -214,17 +261,6 @@ void keyTyped() {
 
 			if (mode != Mode.FREQUENCY_RESIZING) {
 				mode = Mode.FREQUENCY_RESIZING;
-			}
-
-			Button first = model.getFrequentButtons().get(0);
-			Button second = model.getFrequentButtons().get(1);
-			Button third = model.getFrequentButtons().get(2);
-			for (int i = 0; i < model.getFrequentButtons().size(); i++) {
-				if (model.getFrequentButtons().get(i) == first || model.getFrequentButtons().get(i) == second || model.getFrequentButtons().get(i) == third) {
-					model.getFrequentButtons().get(i).grow();
-				} else {
-					model.getFrequentButtons().get(i).shrink();
-				}
 			}
 			break;
 		}
