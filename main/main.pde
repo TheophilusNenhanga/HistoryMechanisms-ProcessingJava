@@ -33,15 +33,21 @@ void draw() {
 		}
 
 		case RECENCY_HIGHLIGHTING: {
+			resetButtons();
 			for (int i = 0; i < 3; i++) {
-				model.getRecentButtons().get(i).changeFill(fillColorsRecency[i]);
+				if (model.getRecentButtons().size() > i+1) {
+					model.getRecentButtons().get(i).changeFill(fillColorsRecency[i]);
+				}
 			}
 			break;
 		}
 
 		case FREQUENCY_HIGHLIGHTING: {
+			resetButtons();
 			for (int i = 0; i < 3; i++) {
-				model.getFrequentButtons().get(i).changeFill(fillColorsFrequency[i]);
+				if (model.getFrequentButtons().size() > i+1) {
+					model.getFrequentButtons().get(i).changeFill(fillColorsFrequency[i]);
+				}
 			}
 			break;
 		}
@@ -99,10 +105,10 @@ void draw() {
 			break;
 		}
 
-	} //<>//
+	} //<>// //<>//
 
 	fileButton.draw();
-	model.getProxies().forEach(b -> b.draw()); //<>//
+	model.getProxies().forEach(b -> b.draw()); //<>// //<>//
 }
 
 void mouseClicked() {
@@ -142,10 +148,10 @@ void mousePressed() {
 	});
 }
 
-//<>//
+
 void mouseMoved() {
 	model.getProxies().forEach((b) -> {
-		if (b.contains(mouseX, mouseY)) { //<>//
+		if (b.contains(mouseX, mouseY)) {  //<>//
 			b.onHoverEnter();
 		} else {
 			b.onHoverExit();
@@ -164,9 +170,13 @@ void mouseMoved() {
 void keyTyped() {
 	switch (key) {
 		case 'q': {
-			println(model.getFrequentButtons());
-			println(model.getRecentButtons());
-			println(model.getProxies());
+      println("Current Mode: " + mode + "\n");
+      println("Button Frequency list: ");
+			println(model.getFrequentButtons() + "\n");
+      println("Button Recency list: ");
+			println(model.getRecentButtons() + "\n");
+      println("Proxy Buttons: ");
+			println(model.getProxies() + "\n");
 			break;
 		}
 
@@ -177,9 +187,24 @@ void keyTyped() {
 				});
 			}
 			if (mode == Mode.FREQUENCY_RESIZING) {
-				model.getButtons().forEach(button -> button.resetSize());
+				resetButtons();
+				model.getButtons().forEach(button -> {
+					button.resetSize();
+					button.setTextSize(18);
+				});
 			}
 
+			for (int i = 0; i < model.getButtons().size(); i++) {
+				if (model.getButtons().get(i) == fileButton) {
+					continue;
+				}
+				if (i == 0) {
+					continue;
+				}
+				Button thisButton = model.getButtons().get(i);
+				Button prevButton = model.getButtons().get(i - 1);
+				thisButton.setY(prevButton.getY() + prevButton.getHeight());
+			}
 			if (mode != Mode.RECENCY_HOTLIST) {
 				mode = Mode.RECENCY_HOTLIST;
 				model.getButtons().forEach(button -> {
@@ -208,7 +233,11 @@ void keyTyped() {
 			}
 
 			if (mode == Mode.FREQUENCY_RESIZING) {
-				model.getButtons().forEach(button -> button.resetSize());
+				model.getButtons().forEach(button -> {
+					button.resetSize();
+					button.setTextSize(18);
+					resetButtons();
+				});
 			}
 
 			if (mode != Mode.RECENCY_HIGHLIGHTING) {
@@ -234,7 +263,11 @@ void keyTyped() {
 			}
 
 			if (mode == Mode.FREQUENCY_RESIZING) {
-				model.getButtons().forEach(button -> button.resetSize());
+				resetButtons();
+				model.getButtons().forEach(button -> {
+					button.resetSize();
+					button.setTextSize(18);
+				});
 			}
 
 			if (mode != Mode.FREQUENCY_HIGHLIGHTING) {
@@ -264,5 +297,21 @@ void keyTyped() {
 			}
 			break;
 		}
+	}
+
+
+}
+
+void resetButtons() {
+	for (int i = 0; i < model.getButtons().size(); i++) {
+		if (model.getButtons().get(i) == fileButton) {
+			continue;
+		}
+		if (i == 0) {
+			continue;
+		}
+		Button thisButton = model.getButtons().get(i);
+		Button prevButton = model.getButtons().get(i - 1);
+		thisButton.setY(prevButton.getY() + prevButton.getHeight());
 	}
 }

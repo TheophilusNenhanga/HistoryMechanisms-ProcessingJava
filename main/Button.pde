@@ -15,6 +15,7 @@ public class Button {
 	private boolean hovered;
 	private int minimumHeight;
 	private int maximumHeight;
+	private int textSize = 18;
 
 	public Button(String action, int x, int y) {
 		this.action = action;
@@ -37,7 +38,7 @@ public class Button {
 		if (this.visible) {
 			fill(this.fill[0], this.fill[1], this.fill[2]);
 			rect(this.x, this.y, this.width, this.height);
-			textSize(18);
+			textSize(this.textSize);
 			fill(0, 0, 0);
 			text(this.action, this.x, this.y, this.width, this.height);
 
@@ -142,25 +143,15 @@ public class Button {
 		return "\n" + this.action + " clicked: " + this.clickCount + " visible: " + this.visible + " fill: " + Arrays.toString(this.fill);
 	}
 
-	public void setX(int newX) {
-		this.x = newX;
-	}
+	public void setX(int newX) {this.x = newX;}
 
-	public int getX() {
-		return this.x;
-	}
+	public int getX() {return this.x;}
 
-	public void setY(int newY) {
-		this.y = newY;
-	}
+	public void setY(int newY) {this.y = newY;}
 
-	public int getY() {
-		return this.y;
-	}
+	public int getY() {return this.y;}
 
-	public int getWidth() {
-		return this.width;
-	}
+	public int getWidth() {return this.width;}
 
 	public int getHeight() {
 		return this.height;
@@ -188,6 +179,7 @@ public class Button {
 
 	public void shrink() {
 		this.height = Math.max(this.minimumHeight, this.height - 3);
+		this.textSize = 10;
 	}
 
 	public void grow(int factor) {
@@ -196,10 +188,16 @@ public class Button {
 
 	public void shrink(int factor) {
 		this.height = Math.max(this.minimumHeight, this.height - 3 * factor);
+		this.textSize = 10;
 	}
 
 	public void resetSize() {
 		this.width = 140;
 		this.height = 30;
 	}
+
+	public int getTextSize() {return this.textSize;}
+
+	public void setTextSize(int newSize) {this.textSize = newSize;}
+
 }
