@@ -1,7 +1,7 @@
 Model model = new Model();
 Button fileButton = model.getFileButton();
 int[][] fillColorsRecency = new int[][]{{60, 60, 255}, {110, 110, 220}, {120, 120, 190}, {130, 130, 170}, {140, 140, 140}};  // Colors that will be used for the different modes
-int[][] fillColorsFrequency = new int[][]{{60, 260, 60}, {100, 230, 100}, {120, 200, 120}, {130, 170, 130}, {140, 140, 140}};
+int[][] fillColorsFrequency = new int[][]{{60, 255, 60}, {100, 220, 100}, {120, 200, 120}, {130, 170, 130}, {140, 140, 140}};
 boolean anyClicked = false;
 
 enum Mode {RECENCY_HOTLIST, RECENCY_HIGHLIGHTING, FREQUENCY_HIGHLIGHTING, FREQUENCY_RESIZING, NO_MODE}
