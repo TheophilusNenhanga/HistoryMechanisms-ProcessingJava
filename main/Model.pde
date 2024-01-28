@@ -1,3 +1,6 @@
+import java.util.Random;
+import java.util.Collections;
+
 public class Model {
 
 	private ArrayList<Button> buttons = new ArrayList<Button>();
@@ -5,6 +8,7 @@ public class Model {
 	private ArrayList<Button> frequents = new ArrayList<Button>();
 	private ArrayList<ProxyButton> proxies = new ArrayList<ProxyButton>();
 	Button fileButton;
+	private Random random = new Random();
 
 	public Model() {
 		this.recents = new ArrayList();
@@ -69,4 +73,27 @@ public class Model {
 			button.resetSize();
 		});
 	}
+
+	public String randomButton() {
+		return this.buttons.get(random.nextInt(1, this.buttons.size())).action;
+	}
+
+	public void randomizeList() {
+		Collections.shuffle(this.buttons);
+		Button removed = this.buttons.remove(this.buttons.indexOf(fileButton));
+		this.buttons.add(0, removed);
+
+		for (int i = 0; i < model.getButtons().size(); i++) {
+			if (model.getButtons().get(i) == fileButton) {
+				continue;
+			}
+			if (i == 0) {
+				continue;
+			}
+			Button thisButton = model.getButtons().get(i);
+			Button prevButton = model.getButtons().get(i - 1);
+			thisButton.setY(prevButton.getY() + prevButton.getHeight());
+		}
+	}
+
 }

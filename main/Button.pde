@@ -143,15 +143,25 @@ public class Button {
 		return "\n" + this.action + " clicked: " + this.clickCount + " visible: " + this.visible + " fill: " + Arrays.toString(this.fill);
 	}
 
-	public void setX(int newX) {this.x = newX;}
+	public void setX(int newX) {
+		this.x = newX;
+	}
 
-	public int getX() {return this.x;}
+	public int getX() {
+		return this.x;
+	}
 
-	public void setY(int newY) {this.y = newY;}
+	public void setY(int newY) {
+		this.y = newY;
+	}
 
-	public int getY() {return this.y;}
+	public int getY() {
+		return this.y;
+	}
 
-	public int getWidth() {return this.width;}
+	public int getWidth() {
+		return this.width;
+	}
 
 	public int getHeight() {
 		return this.height;
@@ -196,8 +206,12 @@ public class Button {
 		this.height = 30;
 	}
 
-	public int getTextSize() {return this.textSize;}
+	public int getTextSize() {
+		return this.textSize;
+	}
 
-	public void setTextSize(int newSize) {this.textSize = newSize;}
+	public void setTextSize(int newSize) {
+		this.textSize = newSize;
+	}
 
 }

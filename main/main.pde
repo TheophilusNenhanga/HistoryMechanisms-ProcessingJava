@@ -4,11 +4,17 @@ int[][] fillColorsRecency = new int[][]{{60, 60, 255}, {110, 110, 220}, {120, 12
 int[][] fillColorsFrequency = new int[][]{{60, 255, 60}, {100, 220, 100}, {120, 200, 120}, {130, 170, 130}, {140, 140, 140}};
 boolean anyClicked = false;
 
-enum Mode {RECENCY_HOTLIST, RECENCY_HIGHLIGHTING, FREQUENCY_HIGHLIGHTING, FREQUENCY_RESIZING, NO_MODE}
+enum Mode {NO_MODE, RECENCY_HOTLIST, RECENCY_HIGHLIGHTING, FREQUENCY_HIGHLIGHTING, FREQUENCY_RESIZING}
 
 Mode mode = Mode.NO_MODE;
 
-boolean childrenShown = false;
+boolean targetClicked = false;
+boolean ready = true;
+long timeStart;
+long timeEnd;
+String target;
+int trialNumber = 0;
+
 
 void setup() {
 	size(1000, 1000);
@@ -18,8 +24,19 @@ void setup() {
 }
 
 void draw() {
-	background(51); // color the background grey each draw loop
+	background(51); // color the background grey each draw loop because things persist between frames
 	fileButton.setVisible(true);
+
+	if (ready) {
+		target = model.randomButton();
+		timeStart = System.currentTimeMillis();
+		trialNumber += 1;
+		ready = false;
+	}
+	fill(255, 255, 255);
+	textSize(20);
+	text(target, 50, 10, 140, 30);
+
 
 	// do something different for each mode
 	switch (mode) {
@@ -35,7 +52,7 @@ void draw() {
 		case RECENCY_HIGHLIGHTING: {
 			resetButtons();
 			for (int i = 0; i < 3; i++) {
-				if (model.getRecentButtons().size() > i+1) {
+				if (model.getRecentButtons().size() > i + 1) {
 					model.getRecentButtons().get(i).changeFill(fillColorsRecency[i]);
 				}
 			}
@@ -45,7 +62,7 @@ void draw() {
 		case FREQUENCY_HIGHLIGHTING: {
 			resetButtons();
 			for (int i = 0; i < 3; i++) {
-				if (model.getFrequentButtons().size() > i+1) {
+				if (model.getFrequentButtons().size() > i + 1) {
 					model.getFrequentButtons().get(i).changeFill(fillColorsFrequency[i]);
 				}
 			}
@@ -105,10 +122,10 @@ void draw() {
 			break;
 		}
 
-	} //<>// //<>//
+	}
 
 	fileButton.draw();
-	model.getProxies().forEach(b -> b.draw()); //<>// //<>//
+	model.getProxies().forEach(b -> b.draw());
 }
 
 void mouseClicked() {
@@ -118,6 +135,11 @@ void mouseClicked() {
 			anyClicked = true;
 			button.onClickEnter();
 			model.addRecentButton(button.getButton());
+			if (button.getAction().equals(target)) {
+				timeEnd = System.currentTimeMillis();
+				println(mode.ordinal() + ", " + trialNumber + ", " + target + ", " + (timeEnd - timeStart));
+				ready = true;
+			}
 		} else {
 			button.onClickExit();
 		}
@@ -128,6 +150,12 @@ void mouseClicked() {
 		if (button.contains(mouseX, mouseY)) {
 			button.onClickEnter();
 			model.addRecentButton(button);
+			if (button.getAction().equals(target)) {
+				timeEnd = System.currentTimeMillis();
+				println(mode.ordinal() + ", " + trialNumber + ", " + target + ", " + (timeEnd - timeStart));
+				ready = true;
+			}
+
 		} else {
 			button.onClickExit();
 		}
@@ -151,7 +179,7 @@ void mousePressed() {
 
 void mouseMoved() {
 	model.getProxies().forEach((b) -> {
-		if (b.contains(mouseX, mouseY)) {  //<>//
+		if (b.contains(mouseX, mouseY)) {
 			b.onHoverEnter();
 		} else {
 			b.onHoverExit();
@@ -170,17 +198,18 @@ void mouseMoved() {
 void keyTyped() {
 	switch (key) {
 		case 'q': {
-      println("Current Mode: " + mode + "\n");
-      println("Button Frequency list: ");
+			println("Current Mode: " + mode + "\n");
+			println("Button Frequency list: ");
 			println(model.getFrequentButtons() + "\n");
-      println("Button Recency list: ");
+			println("Button Recency list: ");
 			println(model.getRecentButtons() + "\n");
-      println("Proxy Buttons: ");
+			println("Proxy Buttons: ");
 			println(model.getProxies() + "\n");
 			break;
 		}
 
 		case '1': {
+			model.randomizeList();
 			if (mode == Mode.RECENCY_HIGHLIGHTING || mode == Mode.FREQUENCY_HIGHLIGHTING) {
 				model.getButtons().forEach(button -> {
 					button.changeFill(200, 200, 200);
@@ -217,6 +246,7 @@ void keyTyped() {
 		}
 
 		case '2': {
+			model.randomizeList();
 			if (mode == Mode.RECENCY_HIGHLIGHTING) {
 				model.getButtons().forEach(button -> {
 					button.changeFill(200, 200, 200);
@@ -247,6 +277,7 @@ void keyTyped() {
 		}
 
 		case '3': {
+			model.randomizeList();
 			if (mode == Mode.RECENCY_HIGHLIGHTING) {
 				model.getButtons().forEach(button -> {
 					button.changeFill(200, 200, 200);
@@ -277,6 +308,7 @@ void keyTyped() {
 		}
 
 		case '4': {
+			model.randomizeList();
 			if (mode == Mode.RECENCY_HIGHLIGHTING || mode == Mode.FREQUENCY_HIGHLIGHTING) {
 				model.getButtons().forEach(button -> {
 					button.changeFill(200, 200, 200);

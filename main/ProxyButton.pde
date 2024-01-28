@@ -20,6 +20,10 @@ class ProxyButton {
 		return this.button;
 	}
 
+	public String getAction() {
+		return this.button.getAction();
+	}
+
 	public void draw() {
 		if (this.button.isVisible()) {
 			fill(this.fill[0], this.fill[1], this.fill[2]);
@@ -38,7 +42,6 @@ class ProxyButton {
 
 	public boolean contains(int x, int y) {
 		if (x >= this.x && y >= this.y && x <= this.x + this.width && y <= this.y + this.height) {
-			println("Proxy button for: " + this.button.getAction());
 			return true;
 		}
 		return false;
